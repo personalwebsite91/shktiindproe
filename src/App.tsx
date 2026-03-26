@@ -312,24 +312,50 @@ export default function App() {
 
       {/* 7. FOUNDER SECTION */}
       <Section id="founder">
-        <div className="flex flex-col md:flex-row items-center gap-16">
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="w-64 h-64 md:w-80 md:h-80 rounded-[60px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center"
-          >
-            <div className="text-6xl font-display font-bold text-brand-orange">SR</div>
-          </motion.div>
-          <div className="flex-1">
-            <RevealText>
-              <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-green mb-4 block">The Visionary</span>
-              <h2 className="text-5xl md:text-6xl font-display font-bold mb-6">Somu Reddy</h2>
-              <p className="text-xl text-brand-orange font-bold mb-8 uppercase tracking-widest">Founder, ShaktiInd Technologies</p>
-              <p className="text-2xl text-gray-500 font-light leading-relaxed max-w-2xl">
-                "A student entrepreneur focused on building real-world technology that solves critical human problems. We are bringing back the soul of innovation."
-              </p>
-            </RevealText>
+        <div className="max-w-6xl mx-auto space-y-24">
+          {/* Founder 1 */}
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              className="w-48 h-48 md:w-64 md:h-64 rounded-[40px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center shrink-0"
+            >
+              <div className="text-5xl font-display font-bold text-brand-orange">SR</div>
+            </motion.div>
+            <div className="flex-1 text-center md:text-left">
+              <RevealText>
+                <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-green mb-4 block">The Visionary</span>
+                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(245,130,32,0.3)]">Somu Reddy</h2>
+                <p className="text-lg text-brand-orange font-bold mb-6 uppercase tracking-widest">Founder, ShaktiInd Technologies</p>
+                <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl">
+                  "A student entrepreneur focused on building real-world technology that solves critical human problems. We are bringing back the soul of innovation."
+                </p>
+              </RevealText>
+            </div>
+          </div>
+
+          {/* Founder 2 */}
+          <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-16">
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="w-48 h-48 md:w-64 md:h-64 rounded-[40px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center shrink-0"
+            >
+              <div className="text-5xl font-display font-bold text-brand-green">GR</div>
+            </motion.div>
+            <div className="flex-1 text-center md:text-right">
+              <RevealText delay={0.2}>
+                <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-4 block">The Architect</span>
+                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(0,141,72,0.3)]">Gopi Krishna Reddy</h2>
+                <p className="text-lg text-brand-green font-bold mb-6 uppercase tracking-widest">Co-Founder, ShaktiInd Technologies</p>
+                <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl ml-auto">
+                  "Supportive tech and student entrepreneur dedicated to building resilient systems that empower humanity. Innovation is a collaborative journey."
+                </p>
+              </RevealText>
+            </div>
           </div>
         </div>
       </Section>
