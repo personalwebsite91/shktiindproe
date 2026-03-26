@@ -41,7 +41,7 @@ export default function App() {
   return (
     <div ref={containerRef} className="relative selection:bg-brand-orange/20 selection:text-brand-orange">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 mix-blend-difference text-white">
+      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-12 py-4 bg-brand-dark text-white border-b border-white/5 shadow-lg">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-display font-bold tracking-tighter">
             <span className="text-brand-orange">shakti</span>
@@ -129,6 +129,58 @@ export default function App() {
                 </RevealText>
               </div>
             ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* 2.5 WHY WE EXIST */}
+      <Section className="bg-white">
+        <div className="max-w-5xl mx-auto">
+          <RevealText>
+            <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-8 block">🔥 Why We Exist</span>
+            <h2 className="text-5xl md:text-7xl font-display font-bold mb-12 leading-tight">
+              We are not here <br /> to build apps.
+            </h2>
+          </RevealText>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <RevealText delay={0.2}>
+              <div className="space-y-8">
+                <p className="text-2xl md:text-3xl text-gray-500 font-light leading-relaxed">
+                  We are here because: <br />
+                  <span className="text-brand-dark font-medium">Technology stopped solving real problems.</span>
+                </p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-xl text-gray-400">
+                    <div className="w-2 h-2 rounded-full bg-brand-orange" />
+                    <p>Safety became reactive.</p>
+                  </div>
+                  <div className="flex items-center gap-4 text-xl text-gray-400">
+                    <div className="w-2 h-2 rounded-full bg-brand-orange" />
+                    <p>Systems became unreliable.</p>
+                  </div>
+                </div>
+                <p className="text-2xl md:text-3xl text-brand-green font-bold">
+                  We are rebuilding technology from purpose.
+                </p>
+              </div>
+            </RevealText>
+            
+            <div className="relative h-64 md:h-96 flex items-center justify-center">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 border-2 border-dashed border-gray-100 rounded-full"
+              />
+              <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-8 border border-dashed border-brand-orange/20 rounded-full"
+              />
+              <div className="text-4xl font-display font-bold text-brand-dark z-10 bg-white p-6 rounded-full shadow-xl">
+                PURPOSE
+              </div>
+            </div>
           </div>
         </div>
       </Section>
@@ -239,6 +291,85 @@ export default function App() {
         </div>
       </Section>
 
+      {/* 4.5 CONNECT EVERYTHING */}
+      <Section className="bg-brand-light overflow-hidden">
+        <div className="max-w-6xl mx-auto relative">
+          <div className="text-center z-10 relative">
+            <RevealText>
+              <h2 className="text-4xl md:text-6xl font-display font-bold mb-12">
+                ShaktiInd is not a <br /> collection of products.
+              </h2>
+              <p className="text-2xl md:text-3xl text-gray-500 font-light max-w-3xl mx-auto leading-relaxed">
+                It is a <span className="text-brand-dark font-medium">unified system</span> designed to protect, predict and respond in real life.
+              </p>
+            </RevealText>
+          </div>
+
+          <div className="mt-24 relative h-[500px] flex items-center justify-center">
+            {/* Central Core */}
+            <motion.div 
+              animate={{ 
+                boxShadow: ["0 0 20px rgba(245,130,32,0.2)", "0 0 60px rgba(245,130,32,0.4)", "0 0 20px rgba(245,130,32,0.2)"]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="w-32 h-32 rounded-full bg-brand-orange flex items-center justify-center text-white font-display font-bold text-xl z-20 shadow-2xl"
+            >
+              CORE
+            </motion.div>
+
+            {/* Revolving Elements */}
+            {[
+              { label: "Safety", icon: <ShieldCheck />, delay: 0, radius: 180 },
+              { label: "Prediction", icon: <Activity />, delay: 2, radius: 180 },
+              { label: "Response", icon: <Zap />, delay: 4, radius: 180 },
+              { label: "Research", icon: <Microscope />, delay: 1, radius: 260 },
+              { label: "Innovation", icon: <Brain />, delay: 3, radius: 260 },
+              { label: "Infrastructure", icon: <Globe />, delay: 5, radius: 260 }
+            ].map((node, i) => (
+              <motion.div
+                key={i}
+                animate={{ 
+                  rotate: 360 
+                }}
+                transition={{ 
+                  duration: 20 + i * 2, 
+                  repeat: Infinity, 
+                  ease: "linear",
+                  delay: node.delay
+                }}
+                className="absolute w-full h-full flex items-center justify-center pointer-events-none"
+              >
+                <div 
+                  style={{ transform: `translateX(${node.radius}px)` }}
+                  className="pointer-events-auto"
+                >
+                  <motion.div 
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 20 + i * 2, repeat: Infinity, ease: "linear", delay: node.delay }}
+                    className="flex flex-col items-center gap-2"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center text-brand-orange">
+                      {node.icon}
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{node.label}</span>
+                  </motion.div>
+                </div>
+                
+                {/* Connecting Line */}
+                <div 
+                  style={{ width: `${node.radius}px` }}
+                  className="absolute left-1/2 top-1/2 h-[1px] bg-gradient-to-r from-brand-orange/20 to-transparent origin-left"
+                />
+              </motion.div>
+            ))}
+            
+            {/* Background Rings */}
+            <div className="absolute w-[360px] h-[360px] border border-gray-100 rounded-full" />
+            <div className="absolute w-[520px] h-[520px] border border-gray-100 rounded-full" />
+          </div>
+        </div>
+      </Section>
+
       {/* 5. FUTURE TECHNOLOGIES */}
       <Section id="vision" className="relative overflow-hidden bg-white">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-brand-green/5 blur-[120px] -z-10" />
@@ -275,17 +406,26 @@ export default function App() {
 
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="md:col-span-2 p-12 rounded-[40px] bg-brand-dark text-white flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden relative"
+            className="md:col-span-2 p-12 rounded-[40px] bg-brand-dark text-white flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-orange/20 to-transparent opacity-50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-orange/20 to-transparent opacity-50 group-hover:opacity-70 transition-opacity" />
             <div className="relative z-10">
-              <Lock className="w-12 h-12 text-brand-orange mb-8" />
+              <div className="flex items-center gap-4 mb-8">
+                <Lock className="w-12 h-12 text-brand-orange" />
+                <div className="px-4 py-1 bg-brand-orange/20 border border-brand-orange/30 rounded-full text-[10px] font-bold uppercase tracking-widest text-brand-orange">
+                  Access Restricted
+                </div>
+              </div>
               <h3 className="text-3xl font-display font-bold mb-4">Confidential Projects</h3>
-              <p className="text-gray-400 text-lg max-w-xl">
+              <p className="text-gray-400 text-lg max-w-xl blur-[4px] group-hover:blur-0 transition-all duration-700">
                 "Some technologies are not ready to be seen yet. We are working on deep-tech solutions that will redefine human safety."
               </p>
+              <div className="mt-8 flex items-center gap-2 text-xs font-bold text-brand-green uppercase tracking-widest animate-pulse">
+                <div className="w-2 h-2 rounded-full bg-brand-green" />
+                Research Layer Active
+              </div>
             </div>
-            <div className="relative z-10 text-8xl font-display font-bold text-white/5 select-none">
+            <div className="relative z-10 text-8xl font-display font-bold text-white/5 select-none group-hover:text-white/10 transition-colors">
               SECRET
             </div>
           </motion.div>
@@ -365,19 +505,27 @@ export default function App() {
         <div className="max-w-4xl mx-auto">
           <RevealText>
             <h2 className="text-5xl md:text-7xl font-display font-bold mb-12">
-              Join the Movement of <br />
-              <span className="text-brand-orange">Real Technology</span>
+              Be Part of the <br />
+              <span className="text-brand-orange">Real-Tech Revolution</span>
             </h2>
           </RevealText>
           
           <RevealText delay={0.2}>
             <div className="flex flex-wrap justify-center gap-6">
-              <button className="px-10 py-5 bg-brand-dark text-white rounded-full font-bold text-lg hover:bg-brand-orange transition-all shadow-lg hover:shadow-brand-orange/20">
-                Collaborate
-              </button>
-              <button className="px-10 py-5 border-2 border-brand-dark text-brand-dark rounded-full font-bold text-lg hover:bg-brand-dark hover:text-white transition-all">
-                Investor Connect
-              </button>
+              <a 
+                href="https://instagram.com/shaktiindofficial" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-10 py-5 bg-brand-dark text-white rounded-full font-bold text-lg hover:bg-brand-orange transition-all shadow-lg hover:shadow-brand-orange/20 inline-block"
+              >
+                Work With Us
+              </a>
+              <a 
+                href="mailto:founder@shaktiind.in"
+                className="px-10 py-5 border-2 border-brand-dark text-brand-dark rounded-full font-bold text-lg hover:bg-brand-dark hover:text-white transition-all inline-block"
+              >
+                Investor Access
+              </a>
               <button className="px-10 py-5 bg-brand-green text-white rounded-full font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-brand-green/20">
                 Experience Prototype
               </button>
@@ -397,9 +545,9 @@ export default function App() {
         </div>
         
         <div className="flex gap-8 text-sm font-bold uppercase tracking-widest text-gray-400">
-          <a href="#" className="hover:text-brand-orange transition-colors">Twitter</a>
-          <a href="#" className="hover:text-brand-green transition-colors">LinkedIn</a>
-          <a href="#" className="hover:text-brand-orange transition-colors">Instagram</a>
+          <a href="https://twitter.com/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Twitter</a>
+          <a href="https://linkedin.com/company/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-green transition-colors">LinkedIn</a>
+          <a href="https://instagram.com/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Instagram</a>
         </div>
 
         <div className="text-gray-400 text-sm font-medium">
