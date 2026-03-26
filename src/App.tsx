@@ -31,6 +31,93 @@ const RevealText = ({ children, delay = 0 }: { children: React.ReactNode, delay?
   </motion.div>
 );
 
+const VideoDisplay = () => {
+  const blocks = Array.from({ length: 12 }); // Number of blocks to fall
+
+  return (
+    <div className="relative w-full h-full flex items-center justify-center p-4">
+      {/* Falling Blocks Background Effect */}
+      <div className="absolute inset-0 grid grid-cols-4 grid-rows-3 gap-2 pointer-events-none opacity-20">
+        {blocks.map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ y: -1000, opacity: 0, rotate: Math.random() * 45 }}
+            animate={{ y: 0, opacity: 1, rotate: 0 }}
+            transition={{
+              duration: 1.5,
+              delay: i * 0.1,
+              type: "spring",
+              stiffness: 50,
+            }}
+            className="bg-brand-orange/20 border border-brand-orange/30 rounded-lg"
+          />
+        ))}
+      </div>
+
+      {/* Main Video Display Container */}
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0, y: 50 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="relative z-20 w-full max-w-2xl aspect-video bg-brand-dark rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)] border-4 border-white/10 group"
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent z-10 pointer-events-none" />
+        
+        {/* "Display" Frame Elements */}
+        <div className="absolute top-4 left-4 z-20 flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+        </div>
+        
+        <div className="absolute top-4 right-4 z-20">
+          <span className="text-[10px] font-mono font-bold text-white/70 bg-white/10 backdrop-blur-md px-2.5 py-1 rounded uppercase tracking-[0.2em] border border-white/10">
+            Prototype Live
+          </span>
+        </div>
+
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
+        >
+          <source src="https://res.cloudinary.com/dn4jcnne6/video/upload/v1765771183/SnapInsta.to_AQMGDOXrfBcZ7RLTynSVZfaGPj4zeCiCdg2jzBjA7cnYElvEyHA6dxvFVIQW4rNNWw0IggFmLJrCAjUk4LRkW2r-v7Rs1kZRpM34eT4_n3mmrq.mp4" type="video/mp4" />
+        </video>
+
+        {/* Scanning Line Effect */}
+        <motion.div 
+          animate={{ top: ["0%", "100%", "0%"] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          className="absolute left-0 right-0 h-[2px] bg-brand-orange/40 z-20 pointer-events-none blur-[1px]"
+        />
+
+        {/* Overlay Text */}
+        <div className="absolute bottom-6 left-6 z-20">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
+            <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest">Research Phase</span>
+          </div>
+          <h3 className="text-white font-display text-lg font-bold tracking-tight">Ecosystem Integration</h3>
+        </div>
+      </motion.div>
+
+      {/* Floating Decorative Elements */}
+      <motion.div
+        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+        transition={{ duration: 5, repeat: Infinity }}
+        className="absolute -top-10 -right-10 w-32 h-32 bg-brand-green/10 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
+        transition={{ duration: 6, repeat: Infinity, delay: 1 }}
+        className="absolute -bottom-10 -left-10 w-32 h-32 bg-brand-orange/10 rounded-full blur-3xl"
+      />
+    </div>
+  );
+};
+
 export default function App() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -56,7 +143,7 @@ export default function App() {
       </nav>
 
       {/* 1. HERO SECTION */}
-      <Section className="relative overflow-hidden bg-white">
+      <Section className="relative overflow-hidden bg-white pt-24 md:pt-0">
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
             animate={{ 
@@ -76,38 +163,44 @@ export default function App() {
           />
         </div>
 
-        <div className="max-w-5xl z-10">
-          <RevealText>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.95] tracking-tight mb-8">
-              Building Real Technology <br />
-              That Protects Human Life <br />
-              <span className="text-brand-orange">— Every Second It Exists.</span>
-            </h1>
-          </RevealText>
-          
-          <RevealText delay={0.2}>
-            <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mb-12 font-light leading-relaxed">
-              ShaktiInd Technologies is not building applications. <br />
-              We are building systems that matter in real life.
-            </p>
-          </RevealText>
+        <div className="grid lg:grid-cols-2 gap-12 items-center z-10 w-full">
+          <div className="max-w-3xl">
+            <RevealText>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.95] tracking-tight mb-8">
+                Building Real Technology <br />
+                That Protects Human Life <br />
+                <span className="text-brand-orange">— Every Second It Exists.</span>
+              </h1>
+            </RevealText>
+            
+            <RevealText delay={0.2}>
+              <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mb-12 font-light leading-relaxed">
+                ShaktiInd Technologies is not building applications. <br />
+                We are building systems that matter in real life.
+              </p>
+            </RevealText>
 
-          <RevealText delay={0.4}>
-            <div className="flex flex-wrap gap-4">
-              <button className="px-8 py-4 bg-brand-dark text-white rounded-full font-medium flex items-center gap-2 hover:bg-brand-orange transition-all duration-300 group">
-                Enter Ecosystem <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="px-8 py-4 border border-gray-200 rounded-full font-medium hover:border-brand-green hover:text-brand-green transition-all duration-300">
-                View Vision
-              </button>
-            </div>
-          </RevealText>
+            <RevealText delay={0.4}>
+              <div className="flex flex-wrap gap-4">
+                <button className="px-8 py-4 bg-brand-dark text-white rounded-full font-medium flex items-center gap-2 hover:bg-brand-orange transition-all duration-300 group">
+                  Enter Ecosystem <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button className="px-8 py-4 border border-gray-200 rounded-full font-medium hover:border-brand-green hover:text-brand-green transition-all duration-300">
+                  View Vision
+                </button>
+              </div>
+            </RevealText>
+          </div>
+
+          <div className="hidden lg:block">
+            <VideoDisplay />
+          </div>
         </div>
 
         <motion.div 
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 text-gray-300"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 text-gray-300 hidden md:block"
         >
           <ChevronDown className="w-8 h-8" />
         </motion.div>
