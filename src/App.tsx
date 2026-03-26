@@ -63,27 +63,131 @@ const Sparkles = () => {
 
 const VideoDisplay = () => {
   const [impacted, setImpacted] = React.useState(false);
-  const blocks = Array.from({ length: 16 });
+  const [safetyVideoIndex, setSafetyVideoIndex] = React.useState(0);
+
+  const allVideos = [
+    "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537449/WhatsApp_Video_2026-03-26_at_8.31.24_PM_fhnpgo.mp4",
+    "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537599/WhatsApp_Video_2026-03-26_at_8.36.06_PM_c6fnrr.mp4",
+    "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537858/WhatsApp_Video_2026-03-26_at_8.39.16_PM_rc5i3d.mp4",
+    "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774535154/WhatsApp_Video_2026-03-26_at_7.54.42_PM_rgjaps.mp4"
+  ];
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setSafetyVideoIndex((prev) => (prev + 1) % allVideos.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const blocks = [
+    { 
+      label: "App UI", 
+      delay: 0, 
+      type: "video", 
+      src: "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774535154/WhatsApp_Video_2026-03-26_at_7.54.42_PM_rgjaps.mp4" 
+    },
+    { 
+      label: "Band Usage", 
+      delay: 0.1, 
+      type: "video", 
+      src: "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537449/WhatsApp_Video_2026-03-26_at_8.31.24_PM_fhnpgo.mp4" 
+    },
+    { 
+      label: "Hardware Test", 
+      delay: 0.2, 
+      type: "video", 
+      src: "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537599/WhatsApp_Video_2026-03-26_at_8.36.06_PM_c6fnrr.mp4" 
+    },
+    { 
+      label: "Safety System", 
+      delay: 0.3, 
+      type: "video", 
+      src: allVideos[safetyVideoIndex] 
+    },
+    { 
+      label: "Prototype", 
+      delay: 0.4, 
+      type: "video", 
+      src: "https://res.cloudinary.com/dn4jcnne6/video/upload/v1774537858/WhatsApp_Video_2026-03-26_at_8.39.16_PM_rc5i3d.mp4" 
+    },
+    { 
+      label: "Research", 
+      delay: 0.5, 
+      type: "image", 
+      src: "https://res.cloudinary.com/dn4jcnne6/image/upload/v1774537426/Screenshot_2026-03-26_203330_mjjx6o.png" 
+    }
+  ];
 
   return (
-    <div className="relative w-full h-[500px] flex items-center justify-center p-4">
-      {/* Falling Blocks with Impact */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-3 pointer-events-none">
-        {blocks.map((_, i) => (
+    <div className="relative w-full h-[600px] flex items-center justify-center p-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full h-full max-w-3xl">
+        {blocks.map((block, i) => (
           <motion.div
             key={i}
-            initial={{ y: -1200, opacity: 0, rotate: Math.random() * 90 - 45 }}
-            animate={{ y: 0, opacity: 0.15, rotate: 0 }}
+            initial={{ y: -1200, opacity: 0, rotate: Math.random() * 20 - 10 }}
+            animate={{ y: 0, opacity: 1, rotate: 0 }}
             onAnimationComplete={() => i === blocks.length - 1 && setImpacted(true)}
             transition={{
               duration: 1.2,
-              delay: i * 0.05,
+              delay: block.delay,
               ease: [0.45, 0, 0.55, 1]
             }}
-            className="bg-brand-orange/20 border border-brand-orange/30 rounded-lg w-full h-full"
-          />
+            className="relative bg-brand-dark rounded-2xl overflow-hidden border border-white/10 shadow-xl group aspect-square md:aspect-auto"
+          >
+            {block.type === "video" ? (
+              <video
+                key={block.src} // Force re-render for Safety System rotation
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+              >
+                <source src={block.src} type="video/mp4" />
+              </video>
+            ) : (
+              <img 
+                src={block.src} 
+                alt={block.label}
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-3">
+              <span className="text-[9px] font-mono text-brand-orange font-bold uppercase tracking-[0.2em]">
+                {block.label}
+              </span>
+            </div>
+            
+            {/* Scanning Line Effect for each block */}
+            <motion.div 
+              animate={{ top: ["0%", "100%", "0%"] }}
+              transition={{ duration: 4 + i, repeat: Infinity, ease: "linear" }}
+              className="absolute left-0 right-0 h-[1px] bg-brand-orange/20 z-20 pointer-events-none"
+            />
+          </motion.div>
         ))}
       </div>
+
+      {/* "Make it exist first" Symbol Overlay */}
+      {impacted && (
+        <motion.div
+          initial={{ scale: 3, opacity: 0, rotate: -15 }}
+          animate={{ scale: 1, opacity: 1, rotate: -8 }}
+          transition={{ duration: 0.6, delay: 0.4, type: "spring", damping: 12 }}
+          className="absolute z-30 pointer-events-none"
+        >
+          <div className="relative border-4 border-brand-orange/30 p-6 rounded-2xl backdrop-blur-[2px]">
+            <h2 className="text-4xl md:text-6xl font-display font-black text-white/20 uppercase tracking-tighter leading-none select-none text-center">
+              make it <br /> <span className="text-brand-orange/40">exist</span> <br /> first
+            </h2>
+            <div className="absolute -top-3 -right-3 bg-brand-orange text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest">
+              Execution First
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Dust/Impact Effect */}
       {impacted && (
@@ -113,60 +217,6 @@ const VideoDisplay = () => {
           ))}
         </div>
       )}
-
-      {/* Main Video Display Container - Revealed after impact */}
-      <motion.div
-        initial={{ scale: 0.5, opacity: 0, filter: "blur(20px)" }}
-        animate={impacted ? { scale: 1, opacity: 1, filter: "blur(0px)" } : {}}
-        transition={{ 
-          duration: 1, 
-          type: "spring", 
-          stiffness: 100,
-          damping: 20
-        }}
-        className="relative z-20 w-full max-w-2xl aspect-video bg-brand-dark rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] border-4 border-white/10 group"
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent z-10 pointer-events-none" />
-        
-        {/* "Display" Frame Elements */}
-        <div className="absolute top-4 left-4 z-20 flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-        </div>
-        
-        <div className="absolute top-4 right-4 z-20">
-          <span className="text-[10px] font-mono font-bold text-white/70 bg-white/10 backdrop-blur-md px-2.5 py-1 rounded uppercase tracking-[0.2em] border border-white/10">
-            Prototype Live
-          </span>
-        </div>
-
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover grayscale transition-all duration-1000 scale-105 group-hover:scale-100"
-        >
-          <source src="https://res.cloudinary.com/dn4jcnne6/video/upload/v1774535154/WhatsApp_Video_2026-03-26_at_7.54.42_PM_rgjaps.mp4" type="video/mp4" />
-        </video>
-
-        {/* Scanning Line Effect */}
-        <motion.div 
-          animate={{ top: ["0%", "100%", "0%"] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-          className="absolute left-0 right-0 h-[2px] bg-brand-orange/40 z-20 pointer-events-none blur-[1px]"
-        />
-
-        {/* Overlay Text */}
-        <div className="absolute bottom-6 left-6 z-20">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-brand-orange animate-pulse" />
-            <span className="text-[10px] font-mono text-white/50 uppercase tracking-widest">Research Phase</span>
-          </div>
-          <h3 className="text-white font-display text-lg font-bold tracking-tight">Ecosystem Integration</h3>
-        </div>
-      </motion.div>
 
       {/* Floating Decorative Elements */}
       <motion.div
@@ -211,7 +261,7 @@ export default function App() {
     const email = "founder@shaktiind.in";
     const cc = "pandurugowri16888@gmail.com";
     const subject = "Request for Prototype Experience";
-    const body = "Hello ShaktiInd Team,\n\nI am interested in experiencing the ShaktiInd prototype. Please let me know the next steps.\n\nBest regards,";
+    const body = "Hello Shaktiind Team,\n\nI am interested in experiencing the Shaktiind prototype. Please let me know the next steps.\n\nBest regards,";
     window.location.href = `mailto:${email}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
@@ -223,6 +273,7 @@ export default function App() {
           <span className="text-2xl font-display font-bold tracking-tighter">
             <span className="text-brand-orange">shakti</span>
             <span className="text-brand-green">ind</span>
+            <span className="text-white/40 ml-1 text-lg font-light">technologies</span>
           </span>
         </div>
         <div className="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest opacity-80">
@@ -266,8 +317,8 @@ export default function App() {
             
             <RevealText delay={0.2}>
               <p className="text-xl md:text-2xl text-gray-500 max-w-2xl mb-12 font-light leading-relaxed">
-                ShaktiInd Technologies is not building applications. <br />
-                We are building systems that matter in real life.
+                Shaktiind Technologies is not a collection of products. <br />
+                It is a <span className="text-brand-dark font-medium">unified system</span> designed to protect, predict and respond in real life.
               </p>
             </RevealText>
 
@@ -319,6 +370,39 @@ export default function App() {
                 </RevealText>
               </div>
             ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* 2.2 WHY NOW SECTION */}
+      <Section className="bg-white">
+        <div className="max-w-5xl mx-auto">
+          <RevealText>
+            <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-8 block">The Urgency</span>
+            <h2 className="text-5xl md:text-7xl font-display font-bold mb-16 leading-tight">
+              The world is becoming <br /> more connected, <br /> 
+              <span className="text-brand-orange">but less safe.</span>
+            </h2>
+          </RevealText>
+          <div className="grid md:grid-cols-2 gap-16 items-start">
+             <RevealText delay={0.2}>
+               <div className="space-y-8">
+                 <p className="text-2xl text-gray-500 font-light leading-relaxed">
+                   Technology is growing, but responsibility is declining. We are witnessing a gap between innovation and human safety.
+                 </p>
+                 <div className="h-[1px] w-24 bg-brand-orange" />
+               </div>
+             </RevealText>
+             <RevealText delay={0.4}>
+               <div className="p-12 bg-brand-light rounded-[40px] border border-gray-100">
+                 <p className="text-2xl md:text-3xl text-brand-dark font-bold leading-tight mb-6">
+                   This is why Shaktiind Technologies exists now.
+                 </p>
+                 <p className="text-lg text-gray-500 leading-relaxed">
+                   To bridge the gap with systems that prioritize life over engagement. We are rebuilding technology from purpose.
+                 </p>
+               </div>
+             </RevealText>
           </div>
         </div>
       </Section>
@@ -379,7 +463,7 @@ export default function App() {
       <Section id="about">
         <RevealText>
           <h2 className="text-4xl md:text-6xl font-display font-bold mb-16">
-            ShaktiInd is a <span className="text-brand-orange">Real-Tech</span> Company
+            Shaktiind Technologies is a <span className="text-brand-orange">Real-Tech</span> Company
           </h2>
         </RevealText>
 
@@ -497,7 +581,7 @@ export default function App() {
                 <div className="text-center z-10 relative">
                   <RevealText>
                     <h2 className="text-4xl md:text-6xl font-display font-bold mb-12">
-                      ShaktiInd is not a <br /> collection of products.
+                      Shaktiind Technologies is not a <br /> collection of products.
                     </h2>
                     <p className="text-2xl md:text-3xl text-gray-500 font-light max-w-3xl mx-auto leading-relaxed">
                       It is a <span className="text-brand-dark font-medium">unified system</span> designed to protect, predict and respond in real life.
@@ -514,7 +598,7 @@ export default function App() {
                     transition={{ duration: 4, repeat: Infinity }}
                     className="w-48 h-48 rounded-full bg-brand-orange flex items-center justify-center text-white font-display font-bold text-center p-6 z-20 shadow-2xl"
                   >
-                    ShaktiInd Technologies
+                    Shaktiind Technologies
                   </motion.div>
 
                   {/* Revolving Elements */}
@@ -635,6 +719,37 @@ export default function App() {
         </div>
       </Section>
 
+      {/* 5.5 EXECUTION SECTION */}
+      <Section className="bg-brand-dark text-white">
+        <div className="max-w-5xl mx-auto">
+          <RevealText>
+            <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-8 block">Execution</span>
+            <h2 className="text-4xl md:text-6xl font-display font-bold mb-16">Currently in Progress</h2>
+          </RevealText>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: "Safety Ecosystem", status: "Prototype in development", icon: <Globe className="text-brand-orange" /> },
+              { title: "Hardware Device", status: "Testing ongoing", icon: <Activity className="text-brand-green" /> },
+              { title: "AI Safety Systems", status: "Under research", icon: <Brain className="text-blue-500" /> }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className="p-8 rounded-3xl bg-white/5 border border-white/10"
+              >
+                <div className="mb-6">{item.icon}</div>
+                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                <p className="text-gray-400 text-sm uppercase tracking-widest">{item.status}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
       {/* 6. WHY THIS MATTERS */}
       <Section className="bg-brand-orange text-white text-center">
         <div className="max-w-4xl mx-auto">
@@ -675,7 +790,7 @@ export default function App() {
               <RevealText>
                 <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-green mb-4 block">The Visionary</span>
                 <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(245,130,32,0.3)]">Panduru Somu Reddy</h2>
-                <p className="text-lg text-brand-orange font-bold mb-6 uppercase tracking-widest">Founder, ShaktiInd Technologies</p>
+                <p className="text-lg text-brand-orange font-bold mb-6 uppercase tracking-widest">Founder, Shaktiind Technologies</p>
                 <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl">
                   "A student entrepreneur focused on building real-world technology that solves critical human problems. We are bringing back the soul of innovation."
                 </p>
@@ -703,7 +818,7 @@ export default function App() {
               <RevealText delay={0.2}>
                 <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-4 block">The Architect</span>
                 <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(0,141,72,0.3)]">Gopi Krishna Reddy M</h2>
-                <p className="text-lg text-brand-green font-bold mb-6 uppercase tracking-widest">Co-Founder, ShaktiInd Technologies</p>
+                <p className="text-lg text-brand-green font-bold mb-6 uppercase tracking-widest">Co-Founder, Shaktiind Technologies</p>
                 <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl ml-auto">
                   "Supportive tech and student entrepreneur dedicated to building resilient systems that empower humanity. Innovation is a collaborative journey."
                 </p>
@@ -756,6 +871,7 @@ export default function App() {
           <span className="text-2xl font-display font-bold tracking-tighter">
             <span className="text-brand-orange">shakti</span>
             <span className="text-brand-green">ind</span>
+            <span className="text-gray-400 ml-1 text-lg font-light">technologies</span>
           </span>
           <p className="text-gray-400 text-sm mt-2 font-medium tracking-widest uppercase">"Real Tech for Real Life"</p>
         </div>
@@ -767,7 +883,7 @@ export default function App() {
         </div>
 
         <div className="text-gray-400 text-sm font-medium">
-          © 2026 ShaktiInd Technologies. One Platform, One Nation.
+          © 2026 Shaktiind Technologies. One Platform, One Nation.
         </div>
       </footer>
     </div>
