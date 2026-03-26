@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { motion, useScroll } from "motion/react";
+import React, { useRef, useState } from "react";
+import { motion, useScroll, AnimatePresence } from "motion/react";
 import { 
   ShieldCheck, 
   Zap, 
@@ -185,10 +185,35 @@ const VideoDisplay = () => {
 
 export default function App() {
   const containerRef = useRef(null);
+  const ecosystemRef = useRef<HTMLDivElement>(null);
+  const [showEcosystem, setShowEcosystem] = useState(false);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleEnterEcosystem = () => {
+    setShowEcosystem(true);
+    setTimeout(() => {
+      ecosystemRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
+  const handleExperiencePrototype = () => {
+    const email = "founder@shaktiind.in";
+    const cc = "pandurugowri16888@gmail.com";
+    const subject = "Request for Prototype Experience";
+    const body = "Hello ShaktiInd Team,\n\nI am interested in experiencing the ShaktiInd prototype. Please let me know the next steps.\n\nBest regards,";
+    window.location.href = `mailto:${email}?cc=${cc}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <div ref={containerRef} className="relative selection:bg-brand-orange/20 selection:text-brand-orange">
@@ -201,9 +226,9 @@ export default function App() {
           </span>
         </div>
         <div className="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest opacity-80">
-          <a href="#ecosystem" className="hover:text-brand-orange transition-colors">Ecosystem</a>
-          <a href="#vision" className="hover:text-brand-green transition-colors">Vision</a>
-          <a href="#founder" className="hover:text-brand-orange transition-colors">Founder</a>
+          <button onClick={handleEnterEcosystem} className="hover:text-brand-orange transition-colors cursor-pointer">Ecosystem</button>
+          <button onClick={() => scrollToSection("vision")} className="hover:text-brand-green transition-colors cursor-pointer">Vision</button>
+          <button onClick={() => scrollToSection("founder")} className="hover:text-brand-orange transition-colors cursor-pointer">Founder</button>
         </div>
       </nav>
 
@@ -248,10 +273,16 @@ export default function App() {
 
             <RevealText delay={0.4}>
               <div className="flex flex-wrap gap-4">
-                <button className="px-8 py-4 bg-brand-dark text-white rounded-full font-medium flex items-center gap-2 hover:bg-brand-orange transition-all duration-300 group">
+                <button 
+                  onClick={handleEnterEcosystem}
+                  className="px-8 py-4 bg-brand-dark text-white rounded-full font-medium flex items-center gap-2 hover:bg-brand-orange transition-all duration-300 group"
+                >
                   Enter Ecosystem <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button className="px-8 py-4 border border-gray-200 rounded-full font-medium hover:border-brand-green hover:text-brand-green transition-all duration-300">
+                <button 
+                  onClick={() => scrollToSection("vision")}
+                  className="px-8 py-4 border border-gray-200 rounded-full font-medium hover:border-brand-green hover:text-brand-green transition-all duration-300"
+                >
                   View Vision
                 </button>
               </div>
@@ -450,84 +481,97 @@ export default function App() {
         </div>
       </Section>
 
-      {/* 4.5 CONNECT EVERYTHING */}
-      <Section className="bg-brand-light overflow-hidden">
-        <div className="max-w-6xl mx-auto relative">
-          <div className="text-center z-10 relative">
-            <RevealText>
-              <h2 className="text-4xl md:text-6xl font-display font-bold mb-12">
-                ShaktiInd is not a <br /> collection of products.
-              </h2>
-              <p className="text-2xl md:text-3xl text-gray-500 font-light max-w-3xl mx-auto leading-relaxed">
-                It is a <span className="text-brand-dark font-medium">unified system</span> designed to protect, predict and respond in real life.
-              </p>
-            </RevealText>
-          </div>
-
-          <div className="mt-24 relative h-[500px] flex items-center justify-center">
-            {/* Central Core */}
-            <motion.div 
-              animate={{ 
-                boxShadow: ["0 0 20px rgba(245,130,32,0.2)", "0 0 60px rgba(245,130,32,0.4)", "0 0 20px rgba(245,130,32,0.2)"]
-              }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="w-32 h-32 rounded-full bg-brand-orange flex items-center justify-center text-white font-display font-bold text-xl z-20 shadow-2xl"
-            >
-              CORE
-            </motion.div>
-
-            {/* Revolving Elements */}
-            {[
-              { label: "Safety", icon: <ShieldCheck />, delay: 0, radius: 180 },
-              { label: "Prediction", icon: <Activity />, delay: 2, radius: 180 },
-              { label: "Response", icon: <Zap />, delay: 4, radius: 180 },
-              { label: "Research", icon: <Microscope />, delay: 1, radius: 260 },
-              { label: "Innovation", icon: <Brain />, delay: 3, radius: 260 },
-              { label: "Infrastructure", icon: <Globe />, delay: 5, radius: 260 }
-            ].map((node, i) => (
-              <motion.div
-                key={i}
-                animate={{ 
-                  rotate: 360 
-                }}
-                transition={{ 
-                  duration: 20 + i * 2, 
-                  repeat: Infinity, 
-                  ease: "linear",
-                  delay: node.delay
-                }}
-                className="absolute w-full h-full flex items-center justify-center pointer-events-none"
-              >
-                <div 
-                  style={{ transform: `translateX(${node.radius}px)` }}
-                  className="pointer-events-auto"
-                >
-                  <motion.div 
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 20 + i * 2, repeat: Infinity, ease: "linear", delay: node.delay }}
-                    className="flex flex-col items-center gap-2"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center text-brand-orange">
-                      {node.icon}
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{node.label}</span>
-                  </motion.div>
+      {/* 4.5 CONNECT EVERYTHING (ECOSYSTEM) */}
+      <AnimatePresence>
+        {showEcosystem && (
+          <motion.div
+            ref={ecosystemRef}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <Section id="ecosystem" className="bg-brand-light overflow-hidden">
+              <div className="max-w-6xl mx-auto relative">
+                <div className="text-center z-10 relative">
+                  <RevealText>
+                    <h2 className="text-4xl md:text-6xl font-display font-bold mb-12">
+                      ShaktiInd is not a <br /> collection of products.
+                    </h2>
+                    <p className="text-2xl md:text-3xl text-gray-500 font-light max-w-3xl mx-auto leading-relaxed">
+                      It is a <span className="text-brand-dark font-medium">unified system</span> designed to protect, predict and respond in real life.
+                    </p>
+                  </RevealText>
                 </div>
-                
-                {/* Connecting Line */}
-                <div 
-                  style={{ width: `${node.radius}px` }}
-                  className="absolute left-1/2 top-1/2 h-[1px] bg-gradient-to-r from-brand-orange/20 to-transparent origin-left"
-                />
-              </motion.div>
-            ))}
-            
-            {/* Background Rings */}
-            <div className="absolute w-[360px] h-[360px] border border-gray-100 rounded-full" />
-            <div className="absolute w-[520px] h-[520px] border border-gray-100 rounded-full" />
-          </div>
-        </div>
-      </Section>
+
+                <div className="mt-24 relative h-[600px] flex items-center justify-center">
+                  {/* Central Core */}
+                  <motion.div 
+                    animate={{ 
+                      boxShadow: ["0 0 20px rgba(245,130,32,0.2)", "0 0 60px rgba(245,130,32,0.4)", "0 0 20px rgba(245,130,32,0.2)"]
+                    }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="w-48 h-48 rounded-full bg-brand-orange flex items-center justify-center text-white font-display font-bold text-center p-6 z-20 shadow-2xl"
+                  >
+                    ShaktiInd Technologies
+                  </motion.div>
+
+                  {/* Revolving Elements */}
+                  {[
+                    { label: "The Band", icon: <Activity />, delay: 0, radius: 200 },
+                    { label: "Wearable Devices", icon: <ShieldCheck />, delay: 2, radius: 200 },
+                    { label: "Applications", icon: <Zap />, delay: 4, radius: 200 },
+                    { label: "Naya Bharat", icon: <Globe />, delay: 1, radius: 280 },
+                    { label: "BrainWave", icon: <Brain />, delay: 3, radius: 280 },
+                    { label: "OceanNet", icon: <Radio />, delay: 5, radius: 280 }
+                  ].map((node, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ 
+                        rotate: 360 
+                      }}
+                      transition={{ 
+                        duration: 25 + i * 3, 
+                        repeat: Infinity, 
+                        ease: "linear",
+                        delay: node.delay
+                      }}
+                      className="absolute w-full h-full flex items-center justify-center pointer-events-none"
+                    >
+                      <div 
+                        style={{ transform: `translateX(${node.radius}px)` }}
+                        className="pointer-events-auto"
+                      >
+                        <motion.div 
+                          animate={{ rotate: -360 }}
+                          transition={{ duration: 25 + i * 3, repeat: Infinity, ease: "linear", delay: node.delay }}
+                          className="flex flex-col items-center gap-2"
+                        >
+                          <div className="w-14 h-14 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center text-brand-orange">
+                            {node.icon}
+                          </div>
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{node.label}</span>
+                        </motion.div>
+                      </div>
+                      
+                      {/* Connecting Line */}
+                      <div 
+                        style={{ width: `${node.radius}px` }}
+                        className="absolute left-1/2 top-1/2 h-[1px] bg-gradient-to-r from-brand-orange/20 to-transparent origin-left"
+                      />
+                    </motion.div>
+                  ))}
+                  
+                  {/* Background Rings */}
+                  <div className="absolute w-[400px] h-[400px] border border-gray-100 rounded-full" />
+                  <div className="absolute w-[560px] h-[560px] border border-gray-100 rounded-full" />
+                </div>
+              </div>
+            </Section>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 5. FUTURE TECHNOLOGIES */}
       <Section id="vision" className="relative overflow-hidden bg-white">
@@ -695,7 +739,10 @@ export default function App() {
               >
                 Investor Access
               </a>
-              <button className="px-10 py-5 bg-brand-green text-white rounded-full font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-brand-green/20">
+              <button 
+                onClick={handleExperiencePrototype}
+                className="px-10 py-5 bg-brand-green text-white rounded-full font-bold text-lg hover:opacity-90 transition-all shadow-lg hover:shadow-brand-green/20"
+              >
                 Experience Prototype
               </button>
             </div>
