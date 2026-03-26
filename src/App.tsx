@@ -31,35 +31,100 @@ const RevealText = ({ children, delay = 0 }: { children: React.ReactNode, delay?
   </motion.div>
 );
 
+const Sparkles = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {Array.from({ length: 30 }).map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            x: Math.random() * 100 + "%", 
+            y: Math.random() * 100 + "%", 
+            opacity: 0,
+            scale: 0 
+          }}
+          animate={{ 
+            y: [null, "-10%", "110%"],
+            opacity: [0, 1, 0],
+            scale: [0, 1, 0]
+          }}
+          transition={{ 
+            duration: Math.random() * 5 + 5, 
+            repeat: Infinity, 
+            delay: Math.random() * 5,
+            ease: "linear"
+          }}
+          className="absolute w-1 h-1 bg-brand-orange/40 rounded-full blur-[1px]"
+        />
+      ))}
+    </div>
+  );
+};
+
 const VideoDisplay = () => {
-  const blocks = Array.from({ length: 12 }); // Number of blocks to fall
+  const [impacted, setImpacted] = React.useState(false);
+  const blocks = Array.from({ length: 16 });
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center p-4">
-      {/* Falling Blocks Background Effect */}
-      <div className="absolute inset-0 grid grid-cols-4 grid-rows-3 gap-2 pointer-events-none opacity-20">
+    <div className="relative w-full h-[500px] flex items-center justify-center p-4">
+      {/* Falling Blocks with Impact */}
+      <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 gap-3 pointer-events-none">
         {blocks.map((_, i) => (
           <motion.div
             key={i}
-            initial={{ y: -1000, opacity: 0, rotate: Math.random() * 45 }}
-            animate={{ y: 0, opacity: 1, rotate: 0 }}
+            initial={{ y: -1200, opacity: 0, rotate: Math.random() * 90 - 45 }}
+            animate={{ y: 0, opacity: 0.15, rotate: 0 }}
+            onAnimationComplete={() => i === blocks.length - 1 && setImpacted(true)}
             transition={{
-              duration: 1.5,
-              delay: i * 0.1,
-              type: "spring",
-              stiffness: 50,
+              duration: 1.2,
+              delay: i * 0.05,
+              ease: [0.45, 0, 0.55, 1]
             }}
-            className="bg-brand-orange/20 border border-brand-orange/30 rounded-lg"
+            className="bg-brand-orange/20 border border-brand-orange/30 rounded-lg w-full h-full"
           />
         ))}
       </div>
 
-      {/* Main Video Display Container */}
+      {/* Dust/Impact Effect */}
+      {impacted && (
+        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <motion.div
+              key={i}
+              initial={{ 
+                x: "50%", 
+                y: "100%", 
+                scale: 0, 
+                opacity: 0.8,
+                filter: "blur(4px)"
+              }}
+              animate={{ 
+                x: `${Math.random() * 100}%`, 
+                y: "-100%", 
+                scale: Math.random() * 4 + 2, 
+                opacity: 0 
+              }}
+              transition={{ 
+                duration: 1.5, 
+                ease: "easeOut" 
+              }}
+              className="absolute bottom-0 w-8 h-8 bg-gray-200/30 rounded-full"
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Main Video Display Container - Revealed after impact */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0, y: 50 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.8 }}
-        className="relative z-20 w-full max-w-2xl aspect-video bg-brand-dark rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)] border-4 border-white/10 group"
+        initial={{ scale: 0.5, opacity: 0, filter: "blur(20px)" }}
+        animate={impacted ? { scale: 1, opacity: 1, filter: "blur(0px)" } : {}}
+        transition={{ 
+          duration: 1, 
+          type: "spring", 
+          stiffness: 100,
+          damping: 20
+        }}
+        className="relative z-20 w-full max-w-2xl aspect-video bg-brand-dark rounded-2xl overflow-hidden shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] border-4 border-white/10 group"
       >
         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent z-10 pointer-events-none" />
         
@@ -81,9 +146,9 @@ const VideoDisplay = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
+          className="w-full h-full object-cover grayscale transition-all duration-1000 scale-105 group-hover:scale-100"
         >
-          <source src="https://res.cloudinary.com/dn4jcnne6/video/upload/v1765771183/SnapInsta.to_AQMGDOXrfBcZ7RLTynSVZfaGPj4zeCiCdg2jzBjA7cnYElvEyHA6dxvFVIQW4rNNWw0IggFmLJrCAjUk4LRkW2r-v7Rs1kZRpM34eT4_n3mmrq.mp4" type="video/mp4" />
+          <source src="https://res.cloudinary.com/dn4jcnne6/video/upload/v1774535154/WhatsApp_Video_2026-03-26_at_7.54.42_PM_rgjaps.mp4" type="video/mp4" />
         </video>
 
         {/* Scanning Line Effect */}
@@ -144,6 +209,7 @@ export default function App() {
 
       {/* 1. HERO SECTION */}
       <Section className="relative overflow-hidden bg-white pt-24 md:pt-0">
+        <Sparkles />
         <div className="absolute inset-0 pointer-events-none">
           <motion.div 
             animate={{ 
@@ -554,12 +620,17 @@ export default function App() {
               viewport={{ once: true }}
               className="w-48 h-48 md:w-64 md:h-64 rounded-[40px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center shrink-0"
             >
-              <div className="text-5xl font-display font-bold text-brand-orange">SR</div>
+              <img 
+                src="https://res.cloudinary.com/dn4jcnne6/image/upload/v1774534240/1_yng62c.jpg" 
+                alt="Panduru Somu Reddy"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </motion.div>
             <div className="flex-1 text-center md:text-left">
               <RevealText>
                 <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-green mb-4 block">The Visionary</span>
-                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(245,130,32,0.3)]">Somu Reddy</h2>
+                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(245,130,32,0.3)]">Panduru Somu Reddy</h2>
                 <p className="text-lg text-brand-orange font-bold mb-6 uppercase tracking-widest">Founder, ShaktiInd Technologies</p>
                 <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl">
                   "A student entrepreneur focused on building real-world technology that solves critical human problems. We are bringing back the soul of innovation."
@@ -577,12 +648,17 @@ export default function App() {
               transition={{ delay: 0.2 }}
               className="w-48 h-48 md:w-64 md:h-64 rounded-[40px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center shrink-0"
             >
-              <div className="text-5xl font-display font-bold text-brand-green">GR</div>
+              <img 
+                src="https://res.cloudinary.com/dn4jcnne6/image/upload/v1774534255/2_afau2w.jpg" 
+                alt="Gopi Krishna Reddy M"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </motion.div>
             <div className="flex-1 text-center md:text-right">
               <RevealText delay={0.2}>
                 <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-4 block">The Architect</span>
-                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(0,141,72,0.3)]">Gopi Krishna Reddy</h2>
+                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(0,141,72,0.3)]">Gopi Krishna Reddy M</h2>
                 <p className="text-lg text-brand-green font-bold mb-6 uppercase tracking-widest">Co-Founder, ShaktiInd Technologies</p>
                 <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl ml-auto">
                   "Supportive tech and student entrepreneur dedicated to building resilient systems that empower humanity. Innovation is a collaborative journey."
