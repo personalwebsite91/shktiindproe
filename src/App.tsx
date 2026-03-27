@@ -877,7 +877,7 @@ export default function App() {
         </div>
         
         <div className="flex gap-8 text-sm font-bold uppercase tracking-widest text-gray-400">
-          <a href="https://twitter.com/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Twitter</a>
+          <a href="https://twitter.com/shaktiindo8821" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Twitter</a>
           <a href="https://linkedin.com/company/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-green transition-colors">LinkedIn</a>
           <a href="https://instagram.com/shaktiindofficial" target="_blank" rel="noopener noreferrer" className="hover:text-brand-orange transition-colors">Instagram</a>
         </div>
