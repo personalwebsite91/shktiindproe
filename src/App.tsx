@@ -799,32 +799,7 @@ export default function App() {
           </div>
 
           {/* Founder 2 */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-16">
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="w-48 h-48 md:w-64 md:h-64 rounded-[40px] bg-brand-light border-4 border-white shadow-2xl overflow-hidden flex items-center justify-center shrink-0"
-            >
-              <img 
-                src="https://res.cloudinary.com/dn4jcnne6/image/upload/v1774534255/2_afau2w.jpg" 
-                alt="Gopi Krishna Reddy M"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-            <div className="flex-1 text-center md:text-right">
-              <RevealText delay={0.2}>
-                <span className="text-sm font-bold uppercase tracking-[0.3em] text-brand-orange mb-4 block">The Architect</span>
-                <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-brand-dark drop-shadow-[0_0_15px_rgba(0,141,72,0.3)]">Gopi Krishna Reddy M</h2>
-                <p className="text-lg text-brand-green font-bold mb-6 uppercase tracking-widest">Co-Founder, Shaktiind Technologies</p>
-                <p className="text-xl text-gray-500 font-light leading-relaxed max-w-2xl ml-auto">
-                  "Supportive tech and student entrepreneur dedicated to building resilient systems that empower humanity. Innovation is a collaborative journey."
-                </p>
-              </RevealText>
-            </div>
-          </div>
+         
         </div>
       </Section>
 
